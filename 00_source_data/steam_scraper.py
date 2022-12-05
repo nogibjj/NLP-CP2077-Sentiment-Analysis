@@ -1,3 +1,3 @@
 import requests 
 
-response = requests.get("store.steampowered.com/appreviews/1091500?json=1")
+response = requests.get("http://store.steampowered.com/appreviews/1091500?json=1")
