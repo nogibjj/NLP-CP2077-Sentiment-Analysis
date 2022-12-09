@@ -1,4 +1,5 @@
-import requests 
+import requests
+import pandas as pd
 
 response = requests.get("http://store.steampowered.com/appreviews/1091500?json=1")
 
@@ -74,15 +75,27 @@ boolean_voted_up[3]
 # Also, we need to get rid of the newlines. We are not aiming to make a text generator, so removing the newlines should not be an issue. 
 # Looks like the scraper did 16,600 reviews despite all the ns I expected. Still, 10K is amazing. We could subset based on that. That's a good e-mail to ask about.
 
-        
+len(x)*100
 
 
+def reviews_to_df(reviews_dn):
 
+    """Turning the reviews into a dataframe"""
 
+    review_ls = []
 
+    for review_set in reviews_dn:
 
-    
+        for review in review_set:
+            
+            review_ls.append([review['review'],review['voted_up']])
 
+    review_df = pd.concat(review_ls)
 
+    return review_df
+
+cp2077_df = reviews_to_df(x)
+
+assert len(x)*100 == cp2077_df.shape[0]
 
                 
