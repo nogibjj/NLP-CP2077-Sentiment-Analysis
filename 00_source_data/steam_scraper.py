@@ -101,3 +101,5 @@ def reviews_to_df(reviews_dn):
 cp2077_df, cp2077_ls = reviews_to_df(x)
 
 # assert len(x)*100-1 == cp2077_df.shape[0]
+
+cp2077_df.to_csv('cp2077_reviews.csv.zip', compression='zip')
