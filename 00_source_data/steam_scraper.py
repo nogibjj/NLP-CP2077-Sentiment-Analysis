@@ -3,6 +3,7 @@ import pandas as pd
 
 response = requests.get("http://store.steampowered.com/appreviews/1091500?json=1")
 
+#please add dates to final zip file
 
 def get_reviews(appid, params={'json':1}):
         url = 'https://store.steampowered.com/appreviews/'
@@ -88,11 +89,11 @@ def reviews_to_df(reviews_dn):
 
         for review in review_set:
             
-            review_ls.append([review['review'],review['voted_up']])
+            review_ls.append([review['review'],review['voted_up'], review['timestamp_created']])
 
     # review_df = pd.concat(review_ls)
 
-    review_df = pd.DataFrame(review_ls, columns = ['Review', 'Recommended or Not Recommended'])
+    review_df = pd.DataFrame(review_ls, columns = ['Review', 'Recommended or Not Recommended', 'Date Timestamp Created'])
 
     assert review_df.shape[0] ==  len(review_ls)
 
@@ -102,4 +103,4 @@ cp2077_df, cp2077_ls = reviews_to_df(x)
 
 # assert len(x)*100-1 == cp2077_df.shape[0]
 
-cp2077_df.to_csv('cp2077_reviews.csv.zip', compression='zip')
+cp2077_df.to_csv('00_source_data/cp2077_reviews.csv.zip', compression='zip')
