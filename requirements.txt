@@ -52,3 +52,4 @@ uvicorn==0.20.0
 vdf==3.4
 wikipedia==1.4.0
 wrapt==1.14.1
+nltk==3.6.5
