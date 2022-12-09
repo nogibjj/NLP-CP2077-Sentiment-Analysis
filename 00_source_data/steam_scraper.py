@@ -104,3 +104,6 @@ cp2077_df, cp2077_ls = reviews_to_df(x)
 # assert len(x)*100-1 == cp2077_df.shape[0]
 
 cp2077_df.to_csv('00_source_data/cp2077_reviews.csv.zip', index=False, compression='zip')
+
+#test
+pd.read_csv('00_source_data/cp2077_reviews.csv.zip', compression='zip',nrows=100)
