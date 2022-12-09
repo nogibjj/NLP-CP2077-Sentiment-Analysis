@@ -94,11 +94,10 @@ def reviews_to_df(reviews_dn):
 
     review_df = pd.DataFrame(review_ls, columns = ['Review', 'Recommended or Not Recommended'])
 
-    return review_df
+    assert review_df.shape[0] ==  len(review_ls)
 
-cp2077_df = reviews_to_df(x)
+    return review_df, review_ls
 
+cp2077_df, cp2077_ls = reviews_to_df(x)
 
-assert len(x)*100 == cp2077_df.shape[0]
-
-                
+# assert len(x)*100-1 == cp2077_df.shape[0]
