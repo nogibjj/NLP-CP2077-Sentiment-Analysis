@@ -90,11 +90,14 @@ def reviews_to_df(reviews_dn):
             
             review_ls.append([review['review'],review['voted_up']])
 
-    review_df = pd.concat(review_ls)
+    # review_df = pd.concat(review_ls)
+
+    review_df = pd.DataFrame(review_ls, columns = ['Review', 'Recommended or Not Recommended'])
 
     return review_df
 
 cp2077_df = reviews_to_df(x)
+
 
 assert len(x)*100 == cp2077_df.shape[0]
 
