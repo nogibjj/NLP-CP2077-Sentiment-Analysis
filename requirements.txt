@@ -54,4 +54,5 @@ vdf==3.4
 wikipedia==1.4.0
 wrapt==1.14.1
 nltk==3.7.0
-
+wordcloud==1.8.1
+tensorflow
