@@ -199,7 +199,7 @@ def classifier(
         if i not in df_choices[2].keys():
             pass
         else:
-            score /= combined_corpus[i] + 1
+            score /= combined_corpus[i]
             prob_word_given_class = (df_choices[2])[i]
             prob_word_given_class = float(format(prob_word_given_class, ".12f"))
 
@@ -439,9 +439,10 @@ def cyberpunk_sentiment(
         bow_recom_set,
         bow_not_recom_set,
     ) = make_bow_dict(df_recom, df_not_recom)
-    combined_corpus = collections.Counter(bow_recom_dict) + collections.Counter(
-        bow_not_recom_dict
-    )
+    combined_corpus = collections.Counter(bow_recom_dict) + collections.Counter(bow_not_recom_dict)
+    combined_corpus_total = sum(combined_corpus.values()) + len(combined_corpus) # This is a +1 in len form for the smoothing done for the other bow
+    for i in combined_corpus:
+        combined_corpus[i] = combined_corpus[i] / combined_corpus_total
     (
         bow_recom_dict,
         bow_not_recom_dict,
