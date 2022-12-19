@@ -1,4 +1,20 @@
 # NLP-CP2077-Sentiment-Analysis
+Packages list:
+Numpy
+collections
+Pandas
+sklearn
+re
+string
+random
+os
+seaborn
+warnings
+nltk - also, do download all
+wordcloud
+requests
+matplotlib
+
 Steps to reproduce the experience:
 1. Run the steam scraper (A_steam_scraper.py) (This step was completed, but if run again will generate a new dataset, it won't be the same as ours, since the scraper gets the most recent 16K reviews)
 2. Master dataset created (cp2077_reviews.csv.zip)
