@@ -451,9 +451,9 @@ def cyberpunk_sentiment(
         bow_recom_dict, bow_not_recom_dict, bow_recom_set, bow_not_recom_set
     )
 
-    full_shape = df.shape[0]
-    positive_review_probability = len(df_recom) / full_shape
-    negative_review_probability = len(df_not_recom) / full_shape
+    full_shape = len(bow_recom_set) + len(bow_not_recom_set)
+    positive_review_probability = len(bow_recom_set) / full_shape
+    negative_review_probability = len(bow_not_recom_set) / full_shape
 
     test["score_all"] = test.Review.apply(
         lambda x: calculate_pos_neg(
