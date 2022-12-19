@@ -158,6 +158,7 @@ def classifier(
     positive_review_probability,
     negative_review_probability,
     full_shape,
+    combined_corpus,
 ):
     """
     This function takes in a string and returns a probability
@@ -198,6 +199,7 @@ def classifier(
         if i not in df_choices[2].keys():
             pass
         else:
+            score /= combined_corpus[i] + 1
             prob_word_given_class = (df_choices[2])[i]
             prob_word_given_class = float(format(prob_word_given_class, ".12f"))
 
@@ -216,6 +218,7 @@ def classifier(
                 score = abs(score)
             elif which_test == "test_only_prob":
                 score *= prob_word_given_class
+                score = abs(score)
             elif which_test == "test_all_abs":
                 score *= prob_word_given_class * tf * idf
                 score = abs(score)
@@ -234,6 +237,7 @@ def calculate_pos_neg(
     positive_review_probability,
     negative_review_probability,
     full_shape,
+    combined_corpus,
 ):
     """
     This function takes in a string and returns a probability
@@ -264,6 +268,7 @@ def calculate_pos_neg(
         positive_review_probability=positive_review_probability,
         negative_review_probability=negative_review_probability,
         full_shape=full_shape,
+        combined_corpus=combined_corpus,
     )
     negative_score = classifier(
         element,
@@ -278,6 +283,7 @@ def calculate_pos_neg(
         positive_review_probability=positive_review_probability,
         negative_review_probability=negative_review_probability,
         full_shape=full_shape,
+        combined_corpus=combined_corpus,
     )
     if positive_score > negative_score:
         return True
@@ -287,7 +293,7 @@ def calculate_pos_neg(
         return False
 
 
-def print_results(df, type_of_dataset, exclude_word=False):
+def print_results(df, type_of_dataset, exclude_word=False, origin_data=False):
     """
     This function prints the results of the classification
     :param df: dataframe
@@ -296,11 +302,13 @@ def print_results(df, type_of_dataset, exclude_word=False):
     :return: print statement
     """
     if exclude_word != False:
-        print(f"This is the result without the word {exclude_word}")
-        print(f"This is the result for the {type_of_dataset} dataset")
+        print(
+            f"This is the result without the word {exclude_word.upper()} from a {origin_data.upper()}, and {type_of_dataset.upper()} dataset"
+        )
     else:
-        print("We did not exclude any words from the analysis")
-        print(f"This is the result for the {type_of_dataset} dataset")
+        print(
+            f"This is the result without any excluded words from a {origin_data.upper()}, and {type_of_dataset.upper()} dataset"
+        )
     print(
         f"Using class probability, frequency, TF, and IDF: {(sum(df['Recommended or Not Recommended'] == df['score_all'])/df.shape[0])*100:.2f}%"
     )
@@ -311,7 +319,7 @@ def print_results(df, type_of_dataset, exclude_word=False):
         f"Using absolute value of class probability, frequency, and IDF: {(sum(df['Recommended or Not Recommended'] == df['score_only_idf_abs'])/df.shape[0])*100:.2f}%"
     )
     print(
-        f"Using class probability and frequency: {(sum(df['Recommended or Not Recommended'] == df['score_only_prob'])/df.shape[0])*100:.2f}%"
+        f"Using absolute value of class probability and frequency: {(sum(df['Recommended or Not Recommended'] == df['score_only_prob'])/df.shape[0])*100:.2f}%"
     )
     print(
         f"Using absolute value of class probability, frequency, TF, and IDF: {(sum(df['Recommended or Not Recommended'] == df['score_all_abs'])/df.shape[0])*100:.2f}%"
@@ -351,6 +359,10 @@ def dict_for_synth(df_recom, df_not_recom):
 def make_synthetic_review(bow_corpus, rev_len_count_corpus, sentiment):
     """
     This function creates a synthetic review
+    :param bow_corpus: dictionary
+    :param rev_len_count_corpus: dictionary
+    :param sentiment: string
+    :return: dataframe
     """
     if sentiment == "positive":
         value = True
@@ -380,6 +392,11 @@ def make_synthetic_review(bow_corpus, rev_len_count_corpus, sentiment):
 
 
 def prompt_syn_data(df):
+    """
+    This function prompts the user to save or read the synthetic data
+    :param df: dataframe
+    :return: print statement, dataframe, or csv
+    """
     print("Do you want to save or read the synthetic data? (save/read)")
     answer = input()
     if answer == "save":
@@ -388,18 +405,27 @@ def prompt_syn_data(df):
             index=False,
         )
         print(
-            "The synthetic data has been saved! Thank you for using our program! Please Watch Toonami Every Saturday at 12:00 AM, Also Watch Aggretsuko!"
+            f"The synthetic data has been saved as synthetic_data_{pd.to_datetime('today').strftime('%Y-%m-%d')}.csv! Thank you for using our program! Hope we qualify for A+! Please watch Toonami every Saturday at 12:00 AM, also watch Aggretsuko! We love it!"
         )
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         print(df.head(10))
-        print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     else:
         print(df.head(10))
-        print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
 
 def cyberpunk_sentiment(
-    csv, balancing="Unbalanced", make_syn=False, exclude_word=False
+    csv, balancing="Unbalanced", make_syn=False, exclude_word=False, origin_data=False
 ):
+    """
+    This function runs the Naive Bayes algorithm
+    :param csv: csv file
+    :param balancing: string
+    :param make_syn: boolean
+    :param exclude_word: boolean or string
+    :return: print statement, dataframe, or csv
+    """
     df = prepare_df(csv, exclusion=exclude_word)
 
     if balancing == "Balanced":
@@ -413,6 +439,9 @@ def cyberpunk_sentiment(
         bow_recom_set,
         bow_not_recom_set,
     ) = make_bow_dict(df_recom, df_not_recom)
+    combined_corpus = collections.Counter(bow_recom_dict) + collections.Counter(
+        bow_not_recom_dict
+    )
     (
         bow_recom_dict,
         bow_not_recom_dict,
@@ -439,6 +468,7 @@ def cyberpunk_sentiment(
             positive_review_probability,
             negative_review_probability,
             full_shape,
+            combined_corpus,
         )
     )
     test["score_only_tf_abs"] = test.Review.apply(
@@ -454,6 +484,7 @@ def cyberpunk_sentiment(
             positive_review_probability,
             negative_review_probability,
             full_shape,
+            combined_corpus,
         )
     )
     test["score_only_idf_abs"] = test.Review.apply(
@@ -469,6 +500,7 @@ def cyberpunk_sentiment(
             positive_review_probability,
             negative_review_probability,
             full_shape,
+            combined_corpus,
         )
     )
     test["score_only_prob"] = test.Review.apply(
@@ -484,6 +516,7 @@ def cyberpunk_sentiment(
             positive_review_probability,
             negative_review_probability,
             full_shape,
+            combined_corpus,
         )
     )
     test["score_all_abs"] = test.Review.apply(
@@ -499,6 +532,7 @@ def cyberpunk_sentiment(
             positive_review_probability,
             negative_review_probability,
             full_shape,
+            combined_corpus,
         )
     )
     if make_syn:
@@ -519,15 +553,96 @@ def cyberpunk_sentiment(
     else:
         pass
 
-    print_results(test, type_of_dataset=balancing, exclude_word=exclude_word)
+    print_results(
+        test,
+        type_of_dataset=balancing,
+        exclude_word=exclude_word,
+        origin_data=origin_data,
+    )
 
 
 if __name__ == "__main__":
+    # comment this out if you prefer to run the script from the command line
     # fire.Fire(cyberpunk_sentiment)
-    thepath = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+
+    # This first run is to run the script with the status of:
+    # REAL dataset
+    # BALANCED dataset,
+    # NOT MAKE SYNTHETIC dataset, and
+    # EXCLUDE word 'cyberpunk'
+
+    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
     cyberpunk_sentiment(
-        thepath, balancing="Unbalanced", make_syn=True, exclude_word="cyberpunk"
+        real_review_path,
+        balancing="Balanced",
+        make_syn=False,
+        exclude_word=False,
+        origin_data="real",
     )
-    # cyberpunk_sentiment(
-    #     thepath, balancing="Balanced", make_syn=False
-    # )
+    print("+-------------------------------------------------------------------------+")
+    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+    cyberpunk_sentiment(
+        real_review_path,
+        balancing="Balanced",
+        make_syn=False,
+        exclude_word="cyberpunk",
+        origin_data="real",
+    )
+    print("+-------------------------------------------------------------------------+")
+    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+    cyberpunk_sentiment(
+        real_review_path,
+        balancing="Unbalanced",
+        make_syn=False,
+        exclude_word=False,
+        origin_data="real",
+    )
+    print("+-------------------------------------------------------------------------+")
+    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+    cyberpunk_sentiment(
+        real_review_path,
+        balancing="Unbalanced",
+        make_syn=False,
+        exclude_word="cyberpunk",
+        origin_data="real",
+    )
+    print("+-------------------------------------------------------------------------+")
+
+    # The next run is to run the script with the status of:
+    # SYNTHETIC dataset
+    # BALANCED dataset,
+    # NOT MAKE SYNTHETIC dataset, and
+    # EXCLUDE word 'cyberpunk'
+
+    synthetic_data_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/synthetic_reviews_all_trial_1.csv"
+    cyberpunk_sentiment(
+        synthetic_data_path,
+        balancing="Balanced",
+        make_syn=False,
+        exclude_word=False,
+        origin_data="synthetic",
+    )
+    print("+-------------------------------------------------------------------------+")
+    cyberpunk_sentiment(
+        synthetic_data_path,
+        balancing="Balanced",
+        make_syn=False,
+        exclude_word="cyberpunk",
+        origin_data="synthetic",
+    )
+    print("+-------------------------------------------------------------------------+")
+    cyberpunk_sentiment(
+        synthetic_data_path,
+        balancing="Unbalanced",
+        make_syn=False,
+        exclude_word=False,
+        origin_data="synthetic",
+    )
+    print("+-------------------------------------------------------------------------+")
+    cyberpunk_sentiment(
+        synthetic_data_path,
+        balancing="Unbalanced",
+        make_syn=False,
+        exclude_word="cyberpunk",
+        origin_data="synthetic",
+    )
