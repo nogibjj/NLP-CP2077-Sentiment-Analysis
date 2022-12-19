@@ -6,7 +6,7 @@ Steps to reproduce the experience:
 4. Cleaned REAL dataset for the generative model created (cleaned_real_reviews.csv)
 ## Real Dataset
 5. Run the generative model (C_Generative_Model.py) on the cleaned real review (cleaned_real_reviews.csv), we will get the accuracy result of generative model in print statement on command line and a csv file with all the new columns (test_with_new_columns.csv). If we opted to make the synthetic data, we will get a csv for the synthetic data (synthetic_reviews_all_trial_1.csv), but running this file will create a different result each time, because it is a stochastic generation of text. 
-6. Run the Bi-LSTM model (lstm_new.ipynb) on the real data, as it has special cleaning (cp2077_reviews.csv.zip)
+6. Run the Bi-LSTM model (lstm_new.ipynb) on the real data, as it has special cleaning (cp2077_reviews.csv.zip), path changing is maybe needed.
 ## Synthetic Dataset
 7. Run the generative model (C_Generative_Model.py) on the synthetic review file (synthetic_reviews_all_trial_1.csv)
-8. Run the Bi-LSTM model (lstm_new_synthetic.ipynb) on the synthetic review file (synthetic_reviews_all_trial_1.csv)
+8. Run the Bi-LSTM model (lstm_new_synthetic.ipynb) on the synthetic review file (synthetic_reviews_all_trial_1.csv), path changing is maybe needed.
