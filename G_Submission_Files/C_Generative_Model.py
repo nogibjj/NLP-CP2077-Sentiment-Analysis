@@ -401,7 +401,7 @@ def prompt_syn_data(df):
     answer = input()
     if answer == "save":
         df.to_csv(
-            f"synthetic_data_{pd.to_datetime('today').strftime('%Y-%m-%d')}.csv",
+            f"synthetic_reviews_all_trial_1.csv",
             index=False,
         )
         print(
@@ -553,7 +553,7 @@ def cyberpunk_sentiment(
         prompt_syn_data(synth_reviews)
     else:
         pass
-
+    test.to_csv("test_with_new_columns.csv")
     print_results(
         test,
         type_of_dataset=balancing,
@@ -581,69 +581,69 @@ if __name__ == "__main__":
         origin_data="real",
     )
     print("+-------------------------------------------------------------------------+")
-    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
-    cyberpunk_sentiment(
-        real_review_path,
-        balancing="Balanced",
-        make_syn=False,
-        exclude_word="cyberpunk",
-        origin_data="real",
-    )
-    print("+-------------------------------------------------------------------------+")
-    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
-    cyberpunk_sentiment(
-        real_review_path,
-        balancing="Unbalanced",
-        make_syn=False,
-        exclude_word=False,
-        origin_data="real",
-    )
-    print("+-------------------------------------------------------------------------+")
-    real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
-    cyberpunk_sentiment(
-        real_review_path,
-        balancing="Unbalanced",
-        make_syn=False,
-        exclude_word="cyberpunk",
-        origin_data="real",
-    )
-    print("+-------------------------------------------------------------------------+")
+    # real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+    # cyberpunk_sentiment(
+    #     real_review_path,
+    #     balancing="Balanced",
+    #     make_syn=False,
+    #     exclude_word="cyberpunk",
+    #     origin_data="real",
+    # )
+    # print("+-------------------------------------------------------------------------+")
+    # real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+    # cyberpunk_sentiment(
+    #     real_review_path,
+    #     balancing="Unbalanced",
+    #     make_syn=False,
+    #     exclude_word=False,
+    #     origin_data="real",
+    # )
+    # print("+-------------------------------------------------------------------------+")
+    # real_review_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/cleaned_real_reviews.csv"
+    # cyberpunk_sentiment(
+    #     real_review_path,
+    #     balancing="Unbalanced",
+    #     make_syn=False,
+    #     exclude_word="cyberpunk",
+    #     origin_data="real",
+    # )
+    # print("+-------------------------------------------------------------------------+")
 
-    # The next run is to run the script with the status of:
-    # SYNTHETIC dataset
-    # BALANCED dataset,
-    # NOT MAKE SYNTHETIC dataset, and
-    # EXCLUDE word 'cyberpunk'
+    # # The next run is to run the script with the status of:
+    # # SYNTHETIC dataset
+    # # BALANCED dataset,
+    # # NOT MAKE SYNTHETIC dataset, and
+    # # EXCLUDE word 'cyberpunk'
 
-    synthetic_data_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/synthetic_reviews_all_trial_1.csv"
-    cyberpunk_sentiment(
-        synthetic_data_path,
-        balancing="Balanced",
-        make_syn=False,
-        exclude_word=False,
-        origin_data="synthetic",
-    )
-    print("+-------------------------------------------------------------------------+")
-    cyberpunk_sentiment(
-        synthetic_data_path,
-        balancing="Balanced",
-        make_syn=False,
-        exclude_word="cyberpunk",
-        origin_data="synthetic",
-    )
-    print("+-------------------------------------------------------------------------+")
-    cyberpunk_sentiment(
-        synthetic_data_path,
-        balancing="Unbalanced",
-        make_syn=False,
-        exclude_word=False,
-        origin_data="synthetic",
-    )
-    print("+-------------------------------------------------------------------------+")
-    cyberpunk_sentiment(
-        synthetic_data_path,
-        balancing="Unbalanced",
-        make_syn=False,
-        exclude_word="cyberpunk",
-        origin_data="synthetic",
-    )
+    # synthetic_data_path = "/workspaces/NLP-CP2077-Sentiment-Analysis/B_Data_Cleaning/synthetic_reviews_all_trial_1.csv"
+    # cyberpunk_sentiment(
+    #     synthetic_data_path,
+    #     balancing="Balanced",
+    #     make_syn=False,
+    #     exclude_word=False,
+    #     origin_data="synthetic",
+    # )
+    # print("+-------------------------------------------------------------------------+")
+    # cyberpunk_sentiment(
+    #     synthetic_data_path,
+    #     balancing="Balanced",
+    #     make_syn=False,
+    #     exclude_word="cyberpunk",
+    #     origin_data="synthetic",
+    # )
+    # print("+-------------------------------------------------------------------------+")
+    # cyberpunk_sentiment(
+    #     synthetic_data_path,
+    #     balancing="Unbalanced",
+    #     make_syn=False,
+    #     exclude_word=False,
+    #     origin_data="synthetic",
+    # )
+    # print("+-------------------------------------------------------------------------+")
+    # cyberpunk_sentiment(
+    #     synthetic_data_path,
+    #     balancing="Unbalanced",
+    #     make_syn=False,
+    #     exclude_word="cyberpunk",
+    #     origin_data="synthetic",
+    # )
